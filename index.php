@@ -18,7 +18,6 @@ class SentimentAnalyzerWrapper {
     }
 }
 
-
 $sentimentAnalyzer = new SentimentAnalyzerWrapper();
 
 $output_text = $sentimentAnalyzer->analyzeText("David is smart, handsome, and funny.");
