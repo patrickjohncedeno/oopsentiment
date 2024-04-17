@@ -4,6 +4,7 @@ include './vendor/autoload.php';
 
 Use Sentiment\Analyzer;
 
+//Encapsulation
 class SentimentAnalyzerWrapper {
     private $analyzer;
 
@@ -11,12 +12,12 @@ class SentimentAnalyzerWrapper {
         $this->analyzer = new Analyzer();
     }
 
+    //Getter since the object analyzer got the getSentiment() method in Analyzer class
     public function analyzeText($text) {
         return $this->analyzer->getSentiment($text);
     }
 }
 
-require_once 'SentimentAnalyzer.php';
 
 $sentimentAnalyzer = new SentimentAnalyzerWrapper();
 
