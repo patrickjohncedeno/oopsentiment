@@ -3,7 +3,7 @@
 include './vendor/autoload.php';
 
 use Stichoza\GoogleTranslate\GoogleTranslate;
-use Sentiment\Analyzer;
+
 
 abstract class SelectedLanguage{
     abstract function languageSource($source);
@@ -32,30 +32,15 @@ class Japanese extends SelectedLanguage{
 $fil = new Filipino();
 $fil->languageSource("fil");
 $selected = $fil->getLanguage();
-echo $selected;
 
 
 $tr = new GoogleTranslate('en'); // Translates into English
 $tr->setSource($selected); // Translate from English
-$tr->setTarget('en'); // Translate to Georgian
+$tr->setTarget('en'); 
 
 echo $tr->translate('Ang hirap mag-code');
 
 // Usage
-$sentimentAnalyzer = new SentimentAnalyzerWrapper();
 
-// Example text with unknown source language
-$text = "Ang tanga mo!";
-
-// Detect language and translate to English
-$sentimentAnalyzer->setTargetLanguage('en');
-$translatedText = $sentimentAnalyzer->translate($text);
-
-// Analyze sentiment
-$sentiment = $sentimentAnalyzer->analyzeText($translatedText);
-
-// Output translated text and sentiment
-echo "Translated Text: $translatedText\n";
-print_r($sentiment);
 
 ?>
