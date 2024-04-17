@@ -1,19 +1,18 @@
 <?php
-//
+
 include './vendor/autoload.php';
 
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use Sentiment\Analyzer;
 
 class LanguageTranslator {
-    private $translator;
+    protected $translator;
 
-    public function setSourceLanguage($sourceLanguage) {
-        $this->translator->setSource($sourceLanguage);
-    }
-
-    public function setTargetLanguage($targetLanguage) {
+    public function __construct($sourceLanguage = null, $targetLanguage = 'en') {
         $this->translator = new GoogleTranslate($targetLanguage);
+        if ($sourceLanguage) {
+            $this->translator->setSource($sourceLanguage);
+        }
     }
 
     public function translate($text) {
@@ -24,19 +23,12 @@ class LanguageTranslator {
 class SentimentAnalyzerWrapper extends LanguageTranslator {
     private $analyzer;
 
-    public function setSourceLanguage($sourceLanguage) {
-        parent::setSourceLanguage($sourceLanguage);
-        $this->initializeAnalyzer();
-    }
-
-    private function initializeAnalyzer() {
-        if ($this->analyzer === null) {
-            $this->analyzer = new Analyzer();
-        }
+    public function __construct($sourceLanguage = null) {
+        parent::__construct($sourceLanguage);
+        $this->analyzer = new Analyzer();
     }
 
     public function analyzeText($text) {
-        $this->initializeAnalyzer(); // Ensure analyzer is initialized
         return $this->analyzer->getSentiment($text);
     }
 }
@@ -48,7 +40,6 @@ $sentimentAnalyzer = new SentimentAnalyzerWrapper();
 $text = "Ang tanga mo!";
 
 // Detect language and translate to English
-$sentimentAnalyzer->setTargetLanguage('en');
 $translatedText = $sentimentAnalyzer->translate($text);
 
 // Analyze sentiment
