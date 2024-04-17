@@ -2,56 +2,51 @@
 
 include './vendor/autoload.php';
 
-
-
 use Stichoza\GoogleTranslate\GoogleTranslate;
+use Sentiment\Analyzer;
 
-$tr = new GoogleTranslate('en'); // Translates into English
-$tr->setSource('fil'); // Translate from English
-$tr->setSource(); // Detect language automatically
-$tr->setTarget('en'); // Translate to Georgian
+class LanguageTranslator {
+    protected $translator;
 
-echo $tr->translate('Gwapo si Louis');
+    public function __construct($sourceLanguage = null, $targetLanguage = 'en') {
+        $this->translator = new GoogleTranslate($targetLanguage);
+        if ($sourceLanguage) {
+            $this->translator->setSource($sourceLanguage);
+        }
+    }
 
+    public function translate($text) {
+        return $this->translator->translate($text);
+    }
+}
 
-
-
-Use Sentiment\Analyzer;
-
-//Encapsulation
-class SentimentAnalyzerWrapper {
+class SentimentAnalyzerWrapper extends LanguageTranslator {
     private $analyzer;
 
-    public function __construct() {
+    public function __construct($sourceLanguage = null) {
+        parent::__construct($sourceLanguage);
         $this->analyzer = new Analyzer();
     }
 
-    //Getter since the object analyzer got the getSentiment() method in Analyzer class
     public function analyzeText($text) {
         return $this->analyzer->getSentiment($text);
     }
 }
 
+// Usage
 $sentimentAnalyzer = new SentimentAnalyzerWrapper();
 
-$output_text = $sentimentAnalyzer->analyzeText("David is smart, handsome, and funny.");
+// Example text with unknown source language
+$text = "Ang tanga mo!";
 
-print_r($output_text);
+// Detect language and translate to English
+$translatedText = $sentimentAnalyzer->translate($text);
+
+// Analyze sentiment
+$sentiment = $sentimentAnalyzer->analyzeText($translatedText);
+
+// Output translated text and sentiment
+echo "Translated Text: $translatedText\n";
+print_r($sentiment);
 
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review</title>
-</head>
-<body>
-    <form action="try.php" method="POST">
-        <input type="text" name="adik" id=""><br>
-        <input type="submit" value="Submit" name="submit">
-    </form>
-
-</body>
-</html>
