@@ -5,41 +5,41 @@ include './vendor/autoload.php';
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use Sentiment\Analyzer;
 
-class LanguageTranslator {
-    private $translator;
-
-    public function setSourceLanguage($sourceLanguage) {
-        $this->translator->setSource($sourceLanguage);
+abstract class SelectedLanguage{
+    abstract function languageSource($source);
+}
+class Filipino extends SelectedLanguage{
+    private $sourceLang;
+    function languageSource($sourceLang){
+        $this->sourceLang = $sourceLang;
     }
-
-    public function setTargetLanguage($targetLanguage) {
-        $this->translator = new GoogleTranslate($targetLanguage);
+    function getLanguage(){
+        return $this->sourceLang;
     }
-
-    public function translate($text) {
-        return $this->translator->translate($text);
+}
+class Japanese extends SelectedLanguage{
+    public $sourceLang;
+    function languageSource($sourceLang){
+        $this->sourceLang = $sourceLang;
+    }
+    function getLanguage(){
+        return $this->sourceLang;
     }
 }
 
-class SentimentAnalyzerWrapper extends LanguageTranslator {
-    private $analyzer;
 
-    public function setSourceLanguage($sourceLanguage) {
-        parent::setSourceLanguage($sourceLanguage);
-        $this->initializeAnalyzer();
-    }
 
-    private function initializeAnalyzer() {
-        if ($this->analyzer === null) {
-            $this->analyzer = new Analyzer();
-        }
-    }
+$fil = new Filipino();
+$fil->languageSource("fil");
+$selected = $fil->getLanguage();
+echo $selected;
 
-    public function analyzeText($text) {
-        $this->initializeAnalyzer(); // Ensure analyzer is initialized
-        return $this->analyzer->getSentiment($text);
-    }
-}
+
+$tr = new GoogleTranslate('en'); // Translates into English
+$tr->setSource($selected); // Translate from English
+$tr->setTarget('en'); // Translate to Georgian
+
+echo $tr->translate('Ang hirap mag-code');
 
 // Usage
 $sentimentAnalyzer = new SentimentAnalyzerWrapper();
