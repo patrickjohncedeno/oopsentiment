@@ -1,12 +1,12 @@
 <?php
-
+//hatdog
 include './vendor/autoload.php';
 
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use Sentiment\Analyzer;
 
 class LanguageTranslator {
-    
+    private $translator;
 
     public function setSourceLanguage($sourceLanguage) {
         $this->translator->setSource($sourceLanguage);
