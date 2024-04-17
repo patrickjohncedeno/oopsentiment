@@ -8,17 +8,17 @@ use Sentiment\Analyzer;
 class LanguageTranslator {
     protected $translator;
 
+    public function convert($text, $sourceLanguage = null) {
+        $this->translator = new GoogleTranslate('en');
+        $this->setSourceLanguage($sourceLanguage);
+        return $this->translator->translate($text);
+    }
+    
     public function setSourceLanguage($sourceLanguage) {
         $this->translator->setSource($sourceLanguage);
     }
 
-    public function translate($text, $sourceLanguage = null) {
-        $this->translator = new GoogleTranslate('en');
-        if ($sourceLanguage) {
-            $this->setSourceLanguage($sourceLanguage);
-        }
-        return $this->translator->translate($text);
-    }
+    
 }
 
 class SentimentAnalyzerWrapper extends LanguageTranslator {
@@ -37,7 +37,7 @@ $sentimentAnalyzer = new SentimentAnalyzerWrapper();
 $text = "Ang tanga mo!";
 
 // Detect language and translate to English
-$translatedText = $sentimentAnalyzer->translate($text);
+$translatedText = $sentimentAnalyzer->convert($text);
 
 // Analyze sentiment
 $sentiment = $sentimentAnalyzer->analyzeText($translatedText);
