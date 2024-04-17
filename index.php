@@ -3,14 +3,23 @@
 include './vendor/autoload.php';
 
 Use Sentiment\Analyzer;
-$analyzer = new Analyzer(); 
 
-$output_text = $analyzer->getSentiment("");
+class SentimentAnalyzerWrapper {
+    private $analyzer;
 
-$output_emoji = $analyzer->getSentiment("😁");
+    public function __construct() {
+        $this->analyzer = new Analyzer();
+    }
 
-$output_text_with_emoji = $analyzer->getSentiment("Aproko doctor made me 🤣.");
+    public function analyzeText($text) {
+        return $this->analyzer->getSentiment($text);
+    }
+}
+
+require_once 'SentimentAnalyzer.php';
+
+$sentimentAnalyzer = new SentimentAnalyzerWrapper();
+
+$output_text = $sentimentAnalyzer->analyzeText("David is smart, handsome, and funny.");
 
 print_r($output_text);
-print_r($output_emoji);
-print_r($output_text_with_emoji);
