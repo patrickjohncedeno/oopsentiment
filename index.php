@@ -1,46 +1,61 @@
 <?php
-//hatdog
+
 include './vendor/autoload.php';
 
 use Stichoza\GoogleTranslate\GoogleTranslate;
+use Sentiment\Analyzer;
 
+class LanguageTranslator {
+    private $translator;
 
-abstract class SelectedLanguage{
-    abstract function languageSource($source);
-}
-class Filipino extends SelectedLanguage{
-    private $sourceLang;
-    function languageSource($sourceLang){
-        $this->sourceLang = $sourceLang;
+    public function setSourceLanguage($sourceLanguage) {
+        $this->translator->setSource($sourceLanguage);
     }
-    function getLanguage(){
-        return $this->sourceLang;
+
+    public function setTargetLanguage($targetLanguage) {
+        $this->translator = new GoogleTranslate($targetLanguage);
     }
-}
-class Japanese extends SelectedLanguage{
-    public $sourceLang;
-    function languageSource($sourceLang){
-        $this->sourceLang = $sourceLang;
-    }
-    function getLanguage(){
-        return $this->sourceLang;
+
+    public function translate($text) {
+        return $this->translator->translate($text);
     }
 }
 
+class SentimentAnalyzerWrapper extends LanguageTranslator {
+    private $analyzer;
 
+    public function setSourceLanguage($sourceLanguage) {
+        parent::setSourceLanguage($sourceLanguage);
+        $this->initializeAnalyzer();
+    }
 
-$fil = new Filipino();
-$fil->languageSource("fil");
-$selected = $fil->getLanguage();
+    private function initializeAnalyzer() {
+        if ($this->analyzer === null) {
+            $this->analyzer = new Analyzer();
+        }
+    }
 
-
-$tr = new GoogleTranslate('en'); // Translates into English
-$tr->setSource($selected); // Translate from English
-$tr->setTarget('en'); 
-
-echo $tr->translate('Ang hirap mag-code');
+    public function analyzeText($text) {
+        $this->initializeAnalyzer(); // Ensure analyzer is initialized
+        return $this->analyzer->getSentiment($text);
+    }
+}
 
 // Usage
+$sentimentAnalyzer = new SentimentAnalyzerWrapper();
 
+// Example text with unknown source language
+$text = "Ang tanga mo!";
+
+// Detect language and translate to English
+$sentimentAnalyzer->setTargetLanguage('en');
+$translatedText = $sentimentAnalyzer->translate($text);
+
+// Analyze sentiment
+$sentiment = $sentimentAnalyzer->analyzeText($translatedText);
+
+// Output translated text and sentiment
+echo "Translated Text: $translatedText\n";
+print_r($sentiment);
 
 ?>
