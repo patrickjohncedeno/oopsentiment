@@ -10,16 +10,17 @@
 require_once 'control.php';
 
 function computeSentiment($compoundScore) {
-    $percentage = abs($compoundScore - 0.5) * 200; // Calculate percentage from -100 to 100
+    $percentage = abs($compoundScore) * 100; // Calculate percentage from 0 to 100
 
-    if ($compoundScore == 0.5) {
+    if ($compoundScore == 0) {
         return ['sentiment' => 'Neutral', 'percentage' => 100]; // Neutral
-    } elseif ($compoundScore < 0.5) {
+    } elseif ($compoundScore < 0) {
         return ['sentiment' => 'Negative', 'percentage' => round($percentage, 2)]; // Negative
-    } else {    
+    } else {
         return ['sentiment' => 'Positive', 'percentage' => round($percentage, 2)]; // Positive
     }
 }
+
 
 
 
@@ -39,16 +40,16 @@ function View(){
     
      
     $result = computeSentiment($sentiment["compound"]);
-    echo "Sentiment: {$result['sentiment']}, Percentage: {$result['percentage']}%, Compound: {$sentiment['compound']}";
+    
     ?>
     <div>
-        <h2 class="text-info"><?php ?> <?php echo "Comment: $comment";?></h2>
+        <h2 class="text-danger"><?php ?> <?php echo "Comment: $comment";?></h2>
     </div>
     <div>
-        <h2 class="text-warning"><?php ?> <?php  echo "Translated Comment: $translatedText";?></h2>
+        <h2 class="text-success"><?php ?> <?php  echo "Translated Comment: $translatedText";?></h2>
     </div>
     <div>
-        <h2 class="text-danger"><?php ?> <?php  echo "Sentiment Analysis: " . $result ?></h2>
+        <h2 class="text-info"><?php ?> <?php  echo "Sentiment: {$result['sentiment']}, Percentage: {$result['percentage']}%";?></h2>
     </div>
     <?php
     }
