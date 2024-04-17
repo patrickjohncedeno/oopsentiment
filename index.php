@@ -1,5 +1,5 @@
 <?php
-
+//
 include './vendor/autoload.php';
 
 use Stichoza\GoogleTranslate\GoogleTranslate;
