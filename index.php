@@ -8,14 +8,15 @@ use Sentiment\Analyzer;
 class LanguageTranslator {
     protected $translator;
 
-    public function __construct($sourceLanguage = null, $targetLanguage = 'en') {
-        $this->translator = new GoogleTranslate($targetLanguage);
-        if ($sourceLanguage) {
-            $this->translator->setSource($sourceLanguage);
-        }
+    public function setSourceLanguage($sourceLanguage) {
+        $this->translator->setSource($sourceLanguage);
     }
 
-    public function translate($text) {
+    public function translate($text, $sourceLanguage = null) {
+        $this->translator = new GoogleTranslate('en');
+        if ($sourceLanguage) {
+            $this->setSourceLanguage($sourceLanguage);
+        }
         return $this->translator->translate($text);
     }
 }
@@ -23,12 +24,8 @@ class LanguageTranslator {
 class SentimentAnalyzerWrapper extends LanguageTranslator {
     private $analyzer;
 
-    public function __construct($sourceLanguage = null) {
-        parent::__construct($sourceLanguage);
-        $this->analyzer = new Analyzer();
-    }
-
     public function analyzeText($text) {
+        $this->analyzer = new Analyzer();
         return $this->analyzer->getSentiment($text);
     }
 }
