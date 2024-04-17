@@ -70,7 +70,8 @@ $sentimentAnalyzer = new SentimentAnalyzerWrapper();
                     <div class="col-md-4 style-3">
                         <div class="tour-item ">
                             <div class="tour-desc bg-white">
-                                <div class="tour-text color-grey-3 text-center">&ldquo;<?php $text = ?>At this School, our mission is to balance a rigorous comprehensive college preparatory curriculum with healthy social and emotional development.&rdquo;</div>
+                                <div class="tour-text color-grey-3 text-center"><?php
+                                    $text = "At this School, our mission is to balance a rigorous comprehensive college preparatory curriculum with healthy social and emotional development.";?> &ldquo;<?php $text; ?>&rdquo;</div>
                                 <div class="d-flex justify-content-center pt-2 pb-2"><img class="tm-people" src="https://images.pexels.com/photos/6625914/pexels-photo-6625914.jpeg" alt=""></div>
                                 <div class="link-name d-flex justify-content-center">Balbir Kaur</div>
                                 <div class="link-position d-flex justify-content-center">Student</div>
