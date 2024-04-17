@@ -1,49 +1,3 @@
-<?php
-
-include './vendor/autoload.php';
-
-use Stichoza\GoogleTranslate\GoogleTranslate;
-use Sentiment\Analyzer;
-
-class LanguageTranslator {
-    protected $translator;
-
-    public function convert($text, $sourceLanguage = null) {
-        $this->translator = new GoogleTranslate('en');
-        $this->setSourceLanguage($sourceLanguage);
-        return $this->translator->translate($text);
-    }
-    
-    public function setSourceLanguage($sourceLanguage) {
-        $this->translator->setSource($sourceLanguage);
-    }
-
-    
-}
-
-class SentimentAnalyzerWrapper extends LanguageTranslator {
-    private $analyzer;
-
-    public function analyzeText($text) {
-        $this->analyzer = new Analyzer();
-        return $this->analyzer->getSentiment($text);
-    }
-}
-
-// Usage
-$sentimentAnalyzer = new SentimentAnalyzerWrapper();
-
-// Example text with unknown source language
-
-
-
-
- // Output translated text and sentiment
- 
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,6 +8,10 @@ $sentimentAnalyzer = new SentimentAnalyzerWrapper();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <?php
+    include 'control.php';
+    include 'process.php';
+    ?>
 <section class="home-testimonial">
     <div class="container-fluid">
         <div class="row d-flex justify-content-center testimonial-pos">
@@ -71,34 +29,28 @@ $sentimentAnalyzer = new SentimentAnalyzerWrapper();
                         <div class="tour-item ">
                             <div class="tour-desc bg-white">
                                 <div class="tour-text color-grey-3 text-center">
-                                        <label for="inp" class="inp">
-                                            <input type="text" id="inp" placeholder="&nbsp;">
-                                            <span class="label">Label</span>
+                                    <form action="" method="post">
+                                    <label for="inp" class="inp">
+                                            <input type="text" name="comment" id="inp" placeholder="Write your Comment">;
                                             <span class="focus-bg"></span>
                                         </label>
-                                    <?php $text = "At this School, our mission is to balance a rigorous comprehensive college preparatory curriculum with healthy social and emotional development.";?> &ldquo;<?php $text; ?>&rdquo;</div>
-                                <div class="d-flex justify-content-center pt-2 pb-2"><img class="tm-people" src="https://images.pexels.com/photos/6625914/pexels-photo-6625914.jpeg" alt=""></div>
-                                <div class="link-name d-flex justify-content-center">Balbir Kaur</div>
-                                <div class="link-position d-flex justify-content-center">Student</div>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </form>
                             </div>
                         </div>
                     </div>
                 </div>
         </section>
 </section>
+<section class="container bg-light position-absolute p-1 shadow" style="z-index: 100000;">
+
+                <?php
+                    View();
+                ?>
+        </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Bootstrap JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <br><br><br><br><br>
 </body>
 </html>
-<?php
- // Detect language and translate to English
- $translatedText = $sentimentAnalyzer->convert($text);
-
- // Analyze sentiment
- $sentiment = $sentimentAnalyzer->analyzeText($translatedText);
-echo "Translated Text: $translatedText\n";
-print_r($sentiment);
-
-?>
